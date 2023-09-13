@@ -26,13 +26,14 @@
 #include "../src/TimeUtils.h"
 #include "../src/SerializationUtils.h"
 
+#include "polyprotect_mobio.h"
 
 using namespace cv;
 using namespace heaan;
 using namespace std;
 using namespace NTL;
 
-vector<int> generate_C(int C_range, int m) {
+vector<long> generate_C(long C_range, long m) {
     """ Randomly generates m coefficients for the PolyProtect mapping.
 
     **Inputs:**
@@ -49,12 +50,12 @@ vector<int> generate_C(int C_range, int m) {
         Array of m coefficients.
 
     """
-    vector<int> neg_range, pos_range, whole_range;
+    vector<long> neg_range, pos_range, whole_range;
 
-    for (int i = -1*C_range; i < 0; i++) {
+    for (long i = -1*C_range; i < 0; i++) {
         neg_range.push_back(i);
     }
-    for (int i = 1; i < C_range + 1; i++) {
+    for (long i = 1; i < C_range + 1; i++) {
         neg_range.push_back(i);
     }
     for (auto i:neg_range) {
@@ -66,13 +67,13 @@ vector<int> generate_C(int C_range, int m) {
 
     shuffle(whole_range.begin(), whole_range.end(), random_device());
     
-    vector<int> C(whole_range.begin(), whole_range.begin() + m);
+    vector<long> C(whole_range.begin(), whole_range.begin() + m);
 
     return C;
 
 }
 
-vector<int> generate_E(int m) {
+vector<long> generate_E(long m) {
     """ Randomly generates m exponents for the PolyProtect mapping.
 
     **Inputs:**
@@ -87,9 +88,9 @@ vector<int> generate_E(int m) {
 
     """
 
-    vector<int> E;
+    vector<long> E;
 
-    for (int i = 1; i < m + 1; i++) {
+    for (long i = 1; i < m + 1; i++) {
         E.push_back(i);
     }
 
@@ -128,15 +129,18 @@ vector<float> polyprotect(int overlap, vector<float> V, vector<int> C, vector<in
     }
 
     """Generate the PolyProtected template, P:"""
-    int m = C.size();  """number of embedding elements used to generate each PolyProtected element"""
-    int step_size = m - overlap;
+    long m = C.size();  """number of embedding elements used to generate each PolyProtected element"""
+    long step_size = m - overlap;
 
     double decimal_remainder, integer;
-    integer = modf((V.size() - m) / step_size, &decimal_remainder);
+    // integer = modf((n - m) / step_size, &decimal_remainder);
 
-    int padding;
+    decimal_remainder = (V.size() - m) % step_size;
+
+    long padding;
     if(decimal_remainder > 0){
-        padding = ceil((1 - decimal_remainder) * step_size);
+        // padding = ceil((1 - decimal_remainder) * step_size);
+        padding = step_size - decimal_remainder;
     }
     else {
         padding = 0;
@@ -144,18 +148,18 @@ vector<float> polyprotect(int overlap, vector<float> V, vector<int> C, vector<in
 
     V.resize(V.size() + padding, 0);
 
-    vector<int> starting_indices;
-    for (int i = 0; i < V.size() - m + 1; i += step_size) {
+    vector<long> starting_indices;
+    for (long i = 0; i < V.size() - m + 1; i += step_size) {
         starting_indices.push_back(i);
     }
 
     vector<double> P(starting_indices.size(), 0.0);
 
-    int storage_ind = 0;
+    long storage_ind = 0;
     for (auto ind:starting_indices) {
-        int final_ind = ind + m;
-        vector<int> crnt_word(V.begin() + ind, V.begin() + final_ind);
-        for (int i = 0; i < m; i++) {
+        long final_ind = ind + m;
+        vector<long> crnt_word(V.begin() + ind, V.begin() + final_ind);
+        for (long i = 0; i < m; i++) {
             P[storage_ind] += C[i] * pow(crnt_word[i], E[i]);
         }
         storage_ind++;
