@@ -13,7 +13,7 @@
 namespace heaan {
 
 static const long logN = 16;
-static const long logQ = 800; // 128-bit security
+static const long logQ = 1200; // 128-bit security
 
 static const double sigma = 3.2;
 static const long h = 64;

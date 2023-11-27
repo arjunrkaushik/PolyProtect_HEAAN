@@ -321,6 +321,10 @@ int main() {
     }
 
     scheme.reScaleByAndEqual(sum_cipher, sum_cipher.logp - logp);
+    scheme.multByConstAndEqual(sum_cipher, 1.0/64.0, logp);
+    scheme.reScaleByAndEqual(sum_cipher, sum_cipher.logp - logp);
+    cout << "Sum : " << sum_cipher.logp << " " << sum_cipher.logq << endl;
+    cout << "Sq1 : " << sq_sum1.logp << " " << sq_sum1.logq << endl;
     scheme.modDownByAndEqual(sum_cipher, sum_cipher.logq - sq_sum1.logq);
 
     scheme.multAndEqual(sum_cipher, sq_sum1);
@@ -335,12 +339,12 @@ int main() {
     for (long i = 0; i < n; i++) {
         temp += pow(test1[i],2);
     }
-    true_val[0] = sqrt(64.0/temp);
+    true_val[0] = (temp/64.0) * sqrt(64.0/temp) * sqrt(64.0/temp);
 
     // for (long i = 0; i < n; i++) {
     //     true_val[i] = log(test1[i]);
     // }
-    complex<double>* decrypt_p = scheme.decrypt(secretKey, sq_sum1);
+    complex<double>* decrypt_p = scheme.decrypt(secretKey, sum_cipher);
 
     StringUtils::compare(true_val, decrypt_p, n, "prod");
 

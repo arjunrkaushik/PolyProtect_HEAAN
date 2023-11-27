@@ -4,13 +4,16 @@ CVPATH=/usr/include/opencv4/
 CVLINKERS=-L/usr/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc
 HEAANLINKERS=../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11 -O2 -I/../src -pthread
 
-all: clean main_ada
+all: clean inv_sq_root_poly
 
 main:
 	g++ main.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread
 
-main_ada:
-	g++ main_adaface.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread
+main_ada_sed:
+	g++ main_adaface_sed.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread
+
+main_ada_cosine:
+	g++ main_adaface_cosine.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread
 
 main_d:
 	g++ main_dissimilar.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread		
@@ -25,13 +28,19 @@ heftDotProduct:
 	g++ heftDotProduct.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread	
 
 sed:
-	g++ sed.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread	
+	g++ sed.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread
 
-invSqRoot:
-	g++ inv_sq_root.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread	
+cosine:
+	g++ cosine.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread	
+
+newtonsInvSqRoot:
+	g++ newtons_inv_sq_root.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread	
 
 zeroFinding:
-	g++ zero_finding.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread	
+	g++ zero_finding.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread
+
+invSqRootPoly:
+	g++ inv_sq_root_poly.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread	
 
 demoheaan:
 	g++ crypt_fft.cpp -I $(CVPATH) $(CVLINKERS) $(HEAANLINKERS)
