@@ -26,7 +26,7 @@
 #include "../src/TimeUtils.h"
 #include "../src/SerializationUtils.h"
 
-// #include "polyprotect_mobio.h"
+// #include "PolyProtectTemplate.h"
 
 using namespace cv;
 using namespace heaan;
@@ -535,7 +535,7 @@ int main() {
     scheme.addLeftRotKey(secretKey, 1);
     long n = 1 << logn;
 
-    timeutils.start("Begin P");
+    // timeutils.start("Begin P");
     long C_range = 50;
     long m = 4;   
     long overlap = 0;
@@ -608,6 +608,7 @@ int main() {
                 word_cipher.free();
             }
 
+            timeutils.start("Template 1");
             cout << "Starting query P" << endl;
             vector<Ciphertext> query_P;
             int cnt_q = 0;
@@ -679,6 +680,7 @@ int main() {
                 delete[] v0;        
             }
             cout << "Query P complete" << endl;
+            timeutils.stop("Template1");
 
             cout << "Starting reference P" << endl;
             vector<Ciphertext> reference_P;
@@ -881,6 +883,6 @@ int main() {
 
     }
     
-    timeutils.stop("End P");
+    // timeutils.stop("End P");
     
 }

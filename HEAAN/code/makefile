@@ -4,10 +4,16 @@ CVPATH=/usr/include/opencv4/
 CVLINKERS=-L/usr/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc
 HEAANLINKERS=../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11 -O2 -I/../src -pthread
 
-all: clean inv_sq_root_poly
+all: clean build_pp main_m8
+
+build_pp: 
+	g++ -c PolyProtectTemplate.cpp -o polyprotect.o -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread
 
 main:
 	g++ main.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread
+
+main_m8: 
+	g++ polyprotect.o main_m8.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread
 
 main_ada_sed:
 	g++ main_adaface_sed.cpp -I $(CVPATH) $(CVLINKERS) -L/usr/local/lib ../lib/libHEAAN.a -lntl -lgmp -lm -std=c++11  -I/../src -pthread
