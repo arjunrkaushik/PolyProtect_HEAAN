@@ -62,6 +62,7 @@ int main() {
         corr[i] = complex<double>(2.0, 0.0);
     }
 
+
     Ciphertext x, y, result;
     scheme.encrypt(x, test1, n, logp, logq);
     scheme.encrypt(result, test2, n, logp, logq);
